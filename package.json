@@ -27,7 +27,7 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/luxon": "^3.3.5",
 		"@types/svelte-range-slider-pips": "^2.0.3",
-		"@types/ws": "^8.5.12",
+		"@types/ws": "^8.5.13",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.62.0",
 		"autoprefixer": "^10.4.16",
