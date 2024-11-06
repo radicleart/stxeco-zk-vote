@@ -1,13 +1,8 @@
 # zk-vote
 
-zk-vote is a sidecar to the stx.eco community voting application. The goal is to
-provide users with anonymous voting rights.
-
-## Routes
-
-The main routes are;
-
-- [zk page](https://stx.eco/zk-vote)
+zk-vote provides zero knowledge proofs enabling stacks community members to vote on
+upcoming blockchain upgrades without revealing sensitive information about the
+links between their balance, address and voting intentions.
 
 ## Building
 
@@ -21,9 +16,4 @@ You can preview the production build with `npm run preview`.
 
 ## Technology
 
-zk-vote is built on zk-stark technology which provides the following benefits;
-
-- **Transparency**: zk-STARKs are transparent and do not require a trusted setup, enhancing security and reducing the potential for “trapdoors.”
-- **Scalability**: zk-STARKs are highly scalable, with proof generation that can handle larger datasets efficiently.
-- **Quantum Resistance**: zk-STARKs are resistant to quantum attacks due to their reliance on hash functions rather than elliptic curve cryptography.
-- **Auditability and Transparency**: zk-STARKs have transparent proof generation, making them highly auditable and appealing for public blockchain use.
+zk-vote is built on zk-stark technology to provide privacy enhancing and scalable voting solutions.

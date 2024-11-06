@@ -1,5 +1,5 @@
 export const appDetails = {
-	name: 'Ecosystem DAO',
+	name: 'stxeco-zk-vote',
 	icon: window
 		? window.location.origin + '/img/stx_eco_logo_icon_white.png'
 		: '/img/stx_eco_logo_icon_white.png'
