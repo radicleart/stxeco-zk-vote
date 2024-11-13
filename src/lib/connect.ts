@@ -1,4 +1,9 @@
-import { getConfig } from '$stores/store_helpers';
+import { getConfig, getSession } from '$stores/store_helpers';
+import { isLoggedIn } from '@mijoco/stx_helpers/dist/index';
+import { testProposals } from './devnet/proposals';
+import { isLoggedInSolana } from './signatures-solana';
+import type { SessionStore } from '$types/local_types';
+import { sessionStore } from '$stores/stores';
 
 let ws: WebSocket;
 let status = 'Disconnected';
@@ -10,6 +15,10 @@ export function connectWebSocket() {
 
 	ws.onopen = () => {
 		status = 'Connected to Rust WebSocket Server';
+		sessionStore.update((conf: SessionStore) => {
+			conf.wsConnected = true;
+			return conf;
+		});
 		console.log(status);
 	};
 
@@ -36,10 +45,18 @@ export function pushMessage(message: object) {
 	}
 }
 
-export async function getActiveProposals() {
-	const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/active-proposals`;
-	const response = await fetch(path);
-	if (response.status === 404) return [];
-	const res = await response.json();
-	return res;
+export async function getProposals() {
+	if (getConfig().VITE_NETWORK === 'devnet') {
+		return testProposals;
+	} else {
+		const path = `${getConfig().VITE_BRIDGE_API}/proposals/v1/all-proposals`;
+		const response = await fetch(path);
+		if (response.status === 404) return [];
+		const res = await response.json();
+		return res;
+	}
+}
+
+export function isWalletConnected() {
+	return isLoggedIn() || isLoggedInSolana();
 }
