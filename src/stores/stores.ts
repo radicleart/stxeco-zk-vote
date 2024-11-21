@@ -15,5 +15,8 @@ export const sessionStore = persisted('sessionStore', {
 		personhoodData: undefined,
 		active: false,
 		available: false
+	},
+	testData: {
+		bitcoinTxid: ''
 	}
 } as SessionStore);

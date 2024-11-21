@@ -10,14 +10,17 @@ export type SessionStore = {
 	name: string;
 	loggedIn: boolean;
 	proofs: Proofs;
+	testData?: {
+		bitcoinTxid?: string;
+	};
 };
 export type MessageInputs = {
 	message: string;
 	vote: string;
 	proposal: string;
 	balance_at_height: number;
-	burn_start_height: number;
-	burn_end_height: number;
+	block_proof_height: number;
+	voting_end_height: number;
 };
 
 export type SignatureData = {

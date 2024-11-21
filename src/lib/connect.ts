@@ -2,7 +2,7 @@ import { getConfig, getSession } from '$stores/store_helpers';
 import { isLoggedIn } from '@mijoco/stx_helpers/dist/index';
 import { testProposals } from './devnet/proposals';
 import { isLoggedInSolana } from './signatures-solana';
-import type { SessionStore } from '$types/local_types';
+import type { SessionStore, SignatureData } from '$types/local_types';
 import { sessionStore } from '$stores/stores';
 
 let ws: WebSocket;
@@ -59,4 +59,19 @@ export async function getProposals() {
 
 export function isWalletConnected() {
 	return isLoggedIn() || isLoggedInSolana();
+}
+
+export async function sendGenerateProof(body: any) {
+	try {
+		const path = 'http://127.0.0.1:3030/stacks/proof/generate';
+		const response = await fetch(path, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(body)
+		});
+		const data = await response.json();
+		console.log(data);
+	} catch (error) {
+		console.error('HTTP request failed:', error);
+	}
 }

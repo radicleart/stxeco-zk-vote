@@ -32,8 +32,8 @@
 				vote,
 				proposal: proposal.proposalMeta.title.trim(),
 				balance_at_height,
-				burn_start_height: proposal.proposalData.burnStartHeight,
-				burn_end_height: proposal.proposalData.burnEndHeight
+				block_proof_height: proposal.proposalData.burnStartHeight,
+				voting_end_height: proposal.proposalData.burnEndHeight
 			};
 			const data = structuredDataSignature(messageObj, function (data: any) {
 				const hash = structuredDataHash(messageObj);

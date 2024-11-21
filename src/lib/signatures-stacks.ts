@@ -72,8 +72,8 @@ export function messageCV(msg: MessageInputs) {
 		proposal: stringAsciiCV(msg.proposal),
 		vote: stringAsciiCV(msg.vote),
 		'voting-power': stringAsciiCV(fmtMicroToStx(msg.balance_at_height)),
-		'voting-window-begins': uintCV(msg.burn_start_height),
-		'voting-window-ends': uintCV(msg.burn_end_height)
+		'voting-window-begins': uintCV(msg.block_proof_height),
+		'voting-window-ends': uintCV(msg.voting_end_height)
 	});
 }
 

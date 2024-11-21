@@ -13,7 +13,7 @@
 	import { sessionStore } from '$stores/stores';
 	import ConstructSolanaProofInputs from './solana/ConstructSolanaProofInputs.svelte';
 	import { appDetails } from '$lib/config';
-	import { isWalletConnected, pushMessage } from '$lib/connect';
+	import { isWalletConnected, pushMessage, sendGenerateProof } from '$lib/connect';
 	import ChooseProposal from './ChooseProposal.svelte';
 	import DecideVote from './DecideVote.svelte';
 	import { verifySignedMessage } from '$lib/signatures-stacks';
@@ -104,7 +104,7 @@
 			proof_type: 'StacksVotingProof',
 			signature_data: $sessionStore.signature_data
 		};
-		pushMessage(message);
+		const result = await sendGenerateProof(message);
 	};
 
 	onMount(async () => {
@@ -113,7 +113,7 @@
 		if ($sessionStore.currentVote) status = ProofStatus.GATHER_SIGNATURE;
 		if ($sessionStore.signature_data) {
 			status = ProofStatus.GENERATE_PROOF;
-			await generateProof();
+			//await generateProof();
 		}
 	});
 </script>

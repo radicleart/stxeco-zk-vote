@@ -18,8 +18,8 @@
 	onMount(async () => {
 		//await transferSol();
 		await checkAndReconnectWallet();
-		const thBob = await getTransactionHistory(bob);
-		const thAlice = await getTransactionHistory(bob);
+		//const thBob = await getTransactionHistory(bob);
+		//const thAlice = await getTransactionHistory(bob);
 		await connectWebSocket();
 	});
 </script>
