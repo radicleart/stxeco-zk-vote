@@ -159,7 +159,7 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 	// 	const txid = tx.txid;
 	// 	const functionArgs = [
 	// 		`0x${hex.encode(serializeCV(bufferCV(hex.decode(tx.txid).reverse())))}`,
-	// 		`0x${hex.encode(serializeCV(bufferCV(hex.decode(block.merkleroot).reverse())))}`,
+	// 		`0x${hex.encode(serializeCV(bufferCV(hex.decode(merkle_root).reverse())))}`,
 	// 		`0x${hex.encode(serializeCV(getProofTuple()))}`
 	// 	];
 
@@ -172,7 +172,7 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 	// 	};
 	// 	contractParameters = {
 	// 		'txid-reversed': hex.encode(hex.decode(tx.txid).reverse()),
-	// 		'root-reversed': hex.encode(hex.decode(block.merkleroot).reverse()),
+	// 		'root-reversed': hex.encode(hex.decode(merkle_root).reverse()),
 	// 		proofs: proofString
 	// 			? proofString.split(' ').join('<br/>')
 	// 			: parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
@@ -242,26 +242,26 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 	// };
 
 	onMount(async () => {
-		const txIds = block.tx.map(function (tx: any) {
+		const txIds = block.txs.map(function (txid: string) {
 			//return hex.encode(hex.decode(tx.txid).reverse()) //hexReverse(tx.txid)
-			return hex.encode(hex.decode(tx).reverse()); //hexReverse(tx.txid)
+			return hex.encode(hex.decode(txid).reverse()); //hexReverse(tx.txid)
 		});
 		answer = undefined;
 		console.log('tx0-r: ' + txIds[0]);
 
-		data = await payloadParseTransaction(tx.txid);
-		deposit = data.opcode === '3C';
+		//data = await payloadParseTransaction(tx.txid);
+		//deposit = data.opcode === '3C';
 
 		const mrT = generateMerkleRoot(txIds);
-		//if (hex.encode(hex.decode(mrT).reverse()) !== block.merkleroot) throw new Error('Merkle root error')
+		//if (hex.encode(hex.decode(mrT).reverse()) !== merkle_root) throw new Error('Merkle root error')
 		merkleTree = generateMerkleTree(txIds);
-		console.log('mr0: ' + block.merkleroot);
+		console.log('mr0: ' + block.merkle_root);
 		console.log('mrT: ' + mrT);
 		parameters = getParametersForProof(tx.txid, tx.hex, block);
 		proofs = parameters.proofElements;
 		blockHashCheck =
-			block.hash === hex.encode(sha256(sha256(hex.decode(parameters.headerHex))).reverse());
-		merkleRootCheck = block.merkleroot === mrT;
+			block.id === hex.encode(sha256(sha256(hex.decode(parameters.headerHex))).reverse());
+		merkleRootCheck = block.merkle_root === mrT;
 
 		proofString = parameters.proofElements.map(({ hash }) => hash).join(' ');
 		amount = bitcoinToSats(tx.vout[1].value);
@@ -275,13 +275,13 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 	<div class=" w-full">
 		{#if error}<p class="text-danger">{error}</p>{/if}
 		<div class="pb-5">
-			<label for="transact-path">Merkle root (block.merkleroot === calcMerkleRoot(txs))</label>
+			<label for="transact-path">Merkle root (block.merkle_root === calcMerkleRoot(txs))</label>
 			<div
-				class={blockHashCheck
+				class={merkleRootCheck
 					? 'bg-success-500 text-white px-4 py-2 rounded border-success-500'
 					: 'bg-gray-600 text-white px-4 py-2 rounded border-white'}
 			>
-				{block.merkleroot}
+				{block.merkle_root}
 			</div>
 		</div>
 
@@ -292,7 +292,7 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 					? 'bg-success-500 text-white px-4 py-2 rounded border-success-500'
 					: 'bg-gray-600 text-white px-4 py-2 rounded border-white'}
 			>
-				{block.hash}
+				{block.id}
 			</div>
 		</div>
 		<div class="pb-5">

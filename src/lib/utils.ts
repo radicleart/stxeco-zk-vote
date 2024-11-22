@@ -2,10 +2,17 @@ import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { getConfig, getSession } from '$stores/store_helpers';
 import type { AddressMempoolObject, SbtcClarityEvent } from '@mijoco/stx_helpers/dist/index';
+import type { HeaderLink } from '$types/local_types';
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.';
 export const smbp = 900;
 export const xsbp = 700;
+
+export function addRouterInfo(headerLinks: Array<HeaderLink>, routeId: string) {
+	const links = getConfig().VITE_HEADER_LINKS;
+	const link = links.find((o: any) => routeId === o.name);
+	if (link) headerLinks.push(link);
+}
 
 const formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',

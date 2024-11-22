@@ -5,9 +5,8 @@ import { sha256 } from '@noble/hashes/sha256';
 import { parsePayloadFromOutput, type TxMinedParameters } from '@mijoco/stx_helpers/dist/index';
 import { getConfig } from '$stores/store_helpers';
 import {
-	fetchBlockAtHeight,
 	fetchBlockByHash,
-	fetchBlockByHashWithTransactions,
+	fetchBlockByHashWithTransactionIds,
 	fetchTransaction,
 	fetchTransactionHex
 } from '@mijoco/btc_helpers/dist/index';
@@ -16,8 +15,11 @@ import * as btc from '@scure/btc-signer';
 const LEFT = 'left';
 const RIGHT = 'right';
 
-export async function fetchBitcoinBlock(blockhash: string, verbosity: number) {
-	return await fetchBlockByHashWithTransactions(getConfig().VITE_MEMPOOL_API, blockhash, 0);
+export async function fetchBlockTxIdList(blockhash: string) {
+	return await fetchBlockByHashWithTransactionIds(getConfig().VITE_MEMPOOL_API, blockhash);
+}
+export async function fetchBlock(blockhash: string) {
+	return await fetchBlockByHash(getConfig().VITE_MEMPOOL_API, blockhash);
 }
 export async function fetchBitcoinTransaction(txId: string): Promise<any> {
 	return await fetchTransaction(getConfig().VITE_MEMPOOL_API, txId);
@@ -52,10 +54,10 @@ export function getParametersForProof(
 	block: any
 ): TxMinedParameters {
 	// coinmonks...
-	const txs = block.tx as string[];
+	const txs = block.txs as string[];
 	const txIndex = txs.findIndex((t: any) => t === txIdNormal);
 	const reversedTxIds = txs.map(function (tx: any) {
-		return hex.encode(hex.decode(tx).reverse()); //hexReverse(tx.txid)
+		return tx; //hex.encode(hex.decode(tx).reverse()); //hexReverse(tx.txid)
 	});
 	ensureEven(reversedTxIds);
 	//const tree = generateMerkleRoot(reversedTxIds)
@@ -80,10 +82,10 @@ export function getParametersForProof(
 
 export function headerHex(block: any) {
 	const headerHex =
-		hex.encode(hex.decode(block.versionHex.toString(16).padStart(8, '0')).reverse()) +
+		hex.encode(hex.decode(block.version.toString(16).padStart(8, '0')).reverse()) +
 		hex.encode(hex.decode(block.previousblockhash).reverse()) +
-		hex.encode(hex.decode(block.merkleroot).reverse()) +
-		hex.encode(hex.decode(block.time.toString(16).padStart(8, '0')).reverse()) +
+		hex.encode(hex.decode(block.merkle_root).reverse()) +
+		hex.encode(hex.decode(block.timestamp.toString(16).padStart(8, '0')).reverse()) +
 		hex.encode(hex.decode(block.bits.toString(16).padStart(8, '0')).reverse()) +
 		hex.encode(hex.decode(block.nonce.toString(16).padStart(8, '0')).reverse());
 

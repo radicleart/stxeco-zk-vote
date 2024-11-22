@@ -7,37 +7,11 @@ export default {
 		'./src/**/*.{html,js,svelte,ts}',
 		'./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'
 	],
-	darkMode: 'media', // or 'media' or 'class'
-	theme: {
-		extend: {}
-	},
-	variants: {
-		extend: {}
-	},
-	plugins: [require('flowbite/plugin')],
 	theme: {
 		colors: {
 			transparent: 'transparent',
 			white: '#ffffff',
 			black: '#000000',
-			sand: {
-				100: '#F3F2F0',
-				200: '#E6E4E2',
-				300: '#D8D6D3',
-				400: '#B7B4B0',
-				500: '#95918C',
-				600: '#7B7775',
-				700: '#605D5D',
-				800: '#484747',
-				900: '#303030'
-			},
-			stackspurple: '#765BFF',
-			midpurple: '#9985FF',
-			lightpurple: '#BBADFF',
-			bloodorange: '#FC6432',
-			lightgray: '#F4F3F0',
-			bitcoinorange: '#FD9D41',
-			// Status
 			gray: {
 				100: '#f9f9f9',
 				200: '#e9e9e9',
@@ -61,19 +35,6 @@ export default {
 				800: '#ab4c2b',
 				900: '#853b22',
 				1000: '#5f2a18'
-			},
-			secondary: {
-				200: '#6ACF9B',
-				300: '#6ACF9B',
-				400: '#34d399',
-				500: '#00D992',
-				550: '#04B179',
-				600: '#059669',
-				620: '#31715A',
-				650: '#0D4938',
-				700: '#111F1F',
-				800: '#112221',
-				900: '#102924'
 			},
 			yellow: {
 				100: '#fffdf5',
@@ -136,37 +97,42 @@ export default {
 				1000: '#601b1b'
 			}
 		},
+		fontSize: {
+			xs: '0.75rem',
+			sm: '0.875rem',
+			base: '1rem',
+			lg: '1.125rem',
+			xl: '1.25rem',
+			'2xl': '1.5rem',
+			'3xl': '1.875rem',
+			'4xl': '2.25rem',
+			'5xl': '3rem',
+			'6xl': '3.75rem'
+		},
 		backgroundImage: {
-			'warning-01': 'rgba(248, 246, 91, 0.40);',
-			'primary-02': 'linear-gradient(306.12deg, #f7b8a3 21.1%, #F4F3F0 84.08%)',
-			'primary-01': 'linear-gradient(180deg, #f5beab 8.49%, #F4F3F0 45.05%)',
-			'success-01': 'linear-gradient(180deg, #1c671b 8.49%, #1c671b 45.05%, #1c671b 80.05%)',
-			'sbtc-primary-01': 'linear-gradient(306.12deg, #ED693C 21.1%, #FDC60B 84.08%)',
-			'sbtc-primary-02': 'linear-gradient(126.12deg, #ED693C 11.8%, #FEDB63 72.43%)',
-			'sbtc-primary-03': 'linear-gradient(126.12deg, #D1DAFA 11.8%, #7F97F1 72.43%)',
-			'sbtc-primary-04': 'linear-gradient(126.12deg, #333C60 11.8%, #7F97F1 72.43%)',
+			'primary-01': 'linear-gradient(306.12deg, #ED693C 21.1%, #FDC60B 84.08%)',
+			'primary-02': 'linear-gradient(126.12deg, #ED693C 11.8%, #FEDB63 72.43%)',
+			'primary-03': 'linear-gradient(126.12deg, #D1DAFA 11.8%, #7F97F1 72.43%)',
+			'primary-04': 'linear-gradient(126.12deg, #333C60 11.8%, #7F97F1 72.43%)',
 			'gray-01': 'linear-gradient(126.12deg, #121212 44.07%, #404040 89.82%)',
 			'black-01': 'linear-gradient(126.12deg, #000000 21.1%, #121212 53.58%)'
 		},
 		extend: {
-			colors: {
-				// flowbite-svelte
-				primary: {
-					50: '#FFF5F2',
-					100: '#FFF1EE',
-					200: '#FFE4DE',
-					300: '#FFD5CC',
-					400: '#FFBCAD',
-					500: '#FE795D',
-					600: '#EF562F',
-					700: '#EB4F27',
-					800: '#CC4522',
-					900: '#A5371B'
+			fontFamily: {
+				sans: ['Circular Std', ...defaultTheme.fontFamily.sans]
+			},
+			boxShadow: {
+				'01': '-4px -4px 12px -2px rgba(249,115,22,0.6), 4px 4px 12px -2px rgba(253,198,11,0.6)',
+				'02': '4px 4px 12px -2px rgba(117,139,222,0.6), -4px -4px 12px -2px rgba(91,109,174,0.6)'
+			},
+			keyframes: {
+				slideinout: {
+					'0%, 100%': { transform: 'translate(0px)' },
+					'50%': { transform: 'translate(40px)' }
 				}
 			},
-			fontFamily: {
-				sans: ['Matter', ...defaultTheme.fontFamily.sans],
-				mono: ['Matter Mono', ...defaultTheme.fontFamily.mono]
+			animation: {
+				slideinout: 'slideinout 3s ease-in-out infinite'
 			}
 		}
 	}

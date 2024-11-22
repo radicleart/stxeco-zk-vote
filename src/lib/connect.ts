@@ -1,5 +1,9 @@
 import { getConfig, getSession } from '$stores/store_helpers';
-import { isLoggedIn } from '@mijoco/stx_helpers/dist/index';
+import {
+	isLoggedIn,
+	type ExchangeRate,
+	type SbtcUserSettingI
+} from '@mijoco/stx_helpers/dist/index';
 import { testProposals } from './devnet/proposals';
 import { isLoggedInSolana } from './signatures-solana';
 import type { SessionStore, SignatureData } from '$types/local_types';
@@ -60,6 +64,31 @@ export async function getProposals() {
 export function isWalletConnected() {
 	return isLoggedIn() || isLoggedInSolana();
 }
+export function defaultSettings(): SbtcUserSettingI {
+	return {
+		useOpDrop: true,
+		peggingIn: true,
+		debugMode: false,
+		executiveTeamMember: false,
+		currency: {
+			cryptoFirst: true,
+			myFiatCurrency: defaultExchangeRate(),
+			denomination: 'USD'
+		}
+	};
+}
+function defaultExchangeRate(): ExchangeRate {
+	return {
+		_id: '',
+		currency: 'USD',
+		fifteen: 0,
+		last: 0,
+		buy: 0,
+		sell: 0,
+		symbol: 'USD',
+		name: 'BTCUSD'
+	};
+}
 
 export async function sendGenerateProof(body: any) {
 	try {
@@ -73,5 +102,15 @@ export async function sendGenerateProof(body: any) {
 		console.log(data);
 	} catch (error) {
 		console.error('HTTP request failed:', error);
+	}
+}
+export async function fetchExchangeRates() {
+	const path = `${getConfig().VITE_BRIDGE_API}/rates/v1/tx/rates`;
+	try {
+		const response = await fetch(path);
+		const res = await response.json();
+		return res;
+	} catch (err) {
+		return undefined;
 	}
 }

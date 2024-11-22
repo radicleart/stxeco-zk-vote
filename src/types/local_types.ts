@@ -1,7 +1,13 @@
-import type { VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
+import type {
+	AddressObject,
+	SbtcUserSettingI,
+	VotingEventProposeProposal
+} from '@mijoco/stx_helpers/dist/index';
 import type { ChainID } from '@stacks/transactions';
 
 export type SessionStore = {
+	$sessionStore: any;
+	[x: string]: any;
 	wsConnected: boolean;
 	preferredChain?: string;
 	currentProposal?: VotingEventProposeProposal;
@@ -10,6 +16,10 @@ export type SessionStore = {
 	name: string;
 	loggedIn: boolean;
 	proofs: Proofs;
+	userSettings: SbtcUserSettingI;
+	keySets: {
+		[key: string]: AddressObject;
+	};
 	testData?: {
 		bitcoinTxid?: string;
 	};
@@ -77,3 +87,16 @@ export enum WALLET {
 	LEATHER = 'leather',
 	PHANTOM = 'phantom'
 }
+export type HeaderItem = {
+	name: string;
+	href: string;
+	display: string;
+	target: string;
+};
+export type HeaderLink = {
+	name: string;
+	href: string;
+	display: string;
+	target: string;
+	items?: Array<HeaderItem>;
+};

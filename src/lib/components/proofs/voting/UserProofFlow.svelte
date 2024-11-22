@@ -31,20 +31,13 @@
 		GATHER_SIGNATURE,
 		GENERATE_PROOF
 	}
+
+	const setDisconnected = async () => {
+		await resetSession();
+	};
+
 	const setConnected = async () => {
-		if ($sessionStore.preferredChain === 'stacks') {
-			await disconnectSolanaWallet();
-			await resetSession();
-			loginStacks(appDetails, function (res: boolean) {
-				console.log('handleAuthenticate: ' + res);
-				window.location.reload();
-			});
-		} else {
-			await resetSession();
-			logUserOut();
-			const signedMessage = await connectWallet();
-			componentKey++;
-		}
+		await resetSession();
 	};
 
 	const setProposal = async (e: any) => {
@@ -80,12 +73,6 @@
 		});
 		status = ProofStatus.CHOOSE_PROPOSAL;
 		componentKey++;
-	};
-
-	const setDisconnected = async () => {
-		logUserOut();
-		disconnectSolanaWallet();
-		window.location.reload();
 	};
 
 	const setVote = async (e: any) => {

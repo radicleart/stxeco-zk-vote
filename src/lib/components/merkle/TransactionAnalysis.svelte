@@ -1,17 +1,24 @@
 <script lang="ts">
-	import Button from './Button.svelte';
 	import VerifyTransactions from './VerifyTransactions.svelte';
 	import DecodeSbtc from './DecodeSbtc.svelte';
 	import { sessionStore } from '$stores/stores';
 	import { onMount } from 'svelte';
-	import { fetchBitcoinBlock, fetchBitcoinTransaction } from '$lib/proofs/merkle_utils';
+	import Button from '../common/Button.svelte';
+	import {
+		fetchBitcoinTransaction,
+		fetchBlock,
+		fetchBlockTxIdList
+	} from '$lib/proofs/merkle_utils';
+	import AccountDropdown from '../header/AccountDropdown.svelte';
 
 	let blockHash: any;
 	let tx: any;
 	let block: any;
+	let txs: Array<string>;
 	export let txId: string; // = '01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3';
 	let error: string | undefined;
 	let componentKey = 0;
+	let ready = false;
 	export let feature = 'sbtcDecode';
 
 	const clazzOn =
@@ -30,18 +37,20 @@
 		try {
 			blockHash = tx.status ? tx.status.block_hash : tx.blockhash;
 			if (blockHash) {
-				block = await fetchBitcoinBlock(blockHash, 2);
-				console.log(block);
+				block = await fetchBlock(blockHash);
+				txs = await fetchBlockTxIdList(blockHash);
+				block.txs = txs;
+				ready = true;
 			}
 		} catch (err: any) {
-			block = true;
+			ready = false;
 		}
 		componentKey++;
 	};
 
 	onMount(async () => {
 		if (!txId) return;
-		verify();
+		//verify();
 	});
 </script>
 
@@ -50,11 +59,15 @@
 	{#if error}<p class="text-danger">{error}</p>{/if}
 
 	<div class="pb-5">
-		<label for="transact-path">Enter txId</label>
-		<input type="text" class="text-black block p-3 rounded-md border w-full" bind:value={txId} />
+		<input
+			type="text"
+			placeholder="Enter transaction id"
+			class="text-black block p-3 rounded-md border w-full"
+			bind:value={txId}
+		/>
 	</div>
 
-	<div class="flex gap-x-5 pb-5">
+	<!-- <div class="flex gap-x-5 pb-5">
 		<div class="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
 			<input
 				class={feature === 'sbtcDecode' ? clazzOn : clazzOff}
@@ -88,24 +101,28 @@
 				Merkle proofs
 			</label>
 		</div>
-	</div>
+	</div> -->
 
-	<div class="pb-5">
-		<Button
-			darkScheme={false}
-			label={feature === 'sbtcDecode' ? 'Decode sBTC' : 'Merkle Proof'}
-			target={''}
-			on:clicked={() => verify()}
-		/>
-	</div>
+	{#if txId}
+		<div class="pb-5">
+			<Button
+				darkScheme={false}
+				label={feature === 'sbtcDecode' ? 'Decode sBTC' : 'Generate Proof'}
+				target={''}
+				on:clicked={() => verify()}
+			/>
+		</div>
+	{/if}
 
-	{#if block}
+	{#if ready}
 		<div class="">
 			{#if tx}
 				{#if feature === 'sbtcDecode'}
 					<DecodeSbtc {tx} />
 				{:else if block}
-					<VerifyTransactions {tx} {block} />
+					{#key componentKey}
+						<VerifyTransactions {tx} {block} />
+					{/key}
 				{/if}
 			{/if}
 		</div>

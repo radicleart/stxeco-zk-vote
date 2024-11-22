@@ -50,7 +50,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@mijoco/btc_helpers": "^0.0.7",
+		"@mijoco/btc_helpers": "^0.0.9",
 		"@mijoco/stx_components": "^0.1.4",
 		"@mijoco/stx_helpers": "^0.5.1",
 		"@noble/hashes": "^1.4.0",

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TransactionAnalysis from '$lib/proofs/components/TransactionAnalysis.svelte';
+	import TransactionAnalysis from '$lib/components/merkle/TransactionAnalysis.svelte';
 	import { sessionStore } from '$stores/stores';
 </script>
 
