@@ -6,7 +6,11 @@
 		type VotingEventProposeProposal
 	} from '@mijoco/stx_helpers/dist/index';
 	import { createEventDispatcher, onMount } from 'svelte';
-	import { connectWallet, disconnectSolanaWallet, isLoggedInSolana } from '$lib/signatures-solana';
+	import {
+		connectWallet,
+		disconnectSolanaWallet,
+		isLoggedInSolana
+	} from '$lib/chains/solana/signatures-solana';
 	import ConnectWallet from './ConnectWallet.svelte';
 	import ConstructStacksProofInputs from './stacks/ConstructStacksProofInputs.svelte';
 	import GenerateProof from './GenerateProof.svelte';

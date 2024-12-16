@@ -9,9 +9,9 @@
 		structuredDataHash,
 		structuredDataSignature,
 		verifySignedMessage
-	} from '$lib/signatures-stacks';
+	} from '$lib/chains/stacks/signatures-stacks';
 	import GenerateProof from '../GenerateProof.svelte';
-	import { isLoggedInSolana } from '$lib/signatures-solana';
+	import { isLoggedInSolana } from '$lib/chains/solana/signatures-solana';
 	import { sessionStore } from '$stores/stores';
 	import type { SignatureData } from '$types/local_types';
 

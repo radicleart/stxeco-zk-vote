@@ -41,6 +41,18 @@ export async function payloadParseTransaction(txid: string): Promise<any> {
 	return parsePayloadFromOutput(getConfig().VITE_NETWORK, tx);
 }
 
+export async function getBtcSignerTx(txid: string): Promise<any> {
+	const txHex = await fetchBitcoinTransactionHex(txid);
+	const tx: btc.Transaction = btc.Transaction.fromRaw(hex.decode(txHex), {
+		allowUnknowInput: true,
+		allowUnknowOutput: true,
+		allowUnknownOutputs: true,
+		allowUnknownInputs: true
+	});
+
+	return tx;
+}
+
 /**
  *
  * @param txIdNormal

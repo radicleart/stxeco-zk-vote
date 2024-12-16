@@ -6,6 +6,9 @@
 	import { bitcoinToSats, explorerAddressUrl } from '$lib/utils';
 	import { getConfig } from '$stores/store_helpers';
 	import {
+		fetchBitcoinTransaction,
+		fetchBlock,
+		fetchBlockTxIdList,
 		generateMerkleRoot,
 		generateMerkleTree,
 		getParametersForProof
@@ -16,30 +19,13 @@
 		type PayloadType,
 		type TxMinedParameters
 	} from '@mijoco/stx_helpers/dist/index';
-	/**
-proofs = (
-0x268c873b99d12a8ea0c87e05de4ac98b16398217abc97f79b94bd9bea35a5ce6 
-0xa26c0adbdd5400d76e12dfc5412d08df244085f538fee7c5c5a2e419caf0450a 
-0x45cc4022c36723ff1e4f9ee1a1529b5ffff1cf1121f326145505f52ae6b6ea19 
-0xe6b607cb87927805a43058e0d5ddfd61249c40b622037a074ec3c76eb48a6416 
-0xcba219199a82ffedd0f4582b11e05e4940cf7873c655f4225e7a88e98d883479 
-0xc8409d8249608a85ce79705d7df877b12079dd6b28ad416b801844bfa9cf810a 
-0xf5d5ea2d88e8f71b5e34256cc206c44e93258b301b8d94f5bed4f601377e6e36
-block_header = 
-0x00600120d2119865b5b567cec541f80c7657e0d956cb5934e203ade332000000000000005fe61766d52c5452bfe45ffcf0536fe7f94a84c4a1c20f300e714c9385956b0364861165c0ff3f1911761e93
-  00600120d2119865b5b567cec541f80c7657e0d956cb5934e203ade332000000000000005fe61766d52c5452bfe45ffcf0536fe7f94a84c4a1c20f300e714c9385956b0364861165c0ff3f1911761e93
-tx-index=40
-tree-depth=7
-txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
-**/
+	import { sessionStore } from '$stores/stores';
 
-	export let tx: any;
-	export let block: any;
-	let data: PayloadType;
-	let deposit = true;
+	export let txId: string;
+	let tx: any;
+	let block: any;
 	let showTree = false;
 	let allowMint = false;
-	let allowBurn = false;
 	let amount = 0;
 	let contractParameters: any;
 	let contract = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.clarity-bitcoin-mini-1';
@@ -54,8 +40,12 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 	let answer: any;
 	let blockHashCheck = false;
 	let merkleRootCheck = false;
+	let mrT: string;
 	let inited = false;
 	let functionName: string;
+	let blockHash: any;
+	let txs: Array<string>;
+	let componentKey = 0;
 
 	const coordinator = true;
 
@@ -241,7 +231,27 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 	// 	console.log(res);
 	// };
 
+	const verify = async () => {
+		tx = await fetchBitcoinTransaction(txId);
+		try {
+			blockHash = tx.status ? tx.status.block_hash : tx.blockhash;
+			if (blockHash) {
+				block = await fetchBlock(blockHash);
+				txs = await fetchBlockTxIdList(blockHash);
+				block.txs = txs;
+			}
+		} catch (err: any) {}
+		componentKey++;
+	};
+
 	onMount(async () => {
+		sessionStore.update((conf) => {
+			conf.testData = {
+				bitcoinTxid: txId
+			};
+			return conf;
+		});
+		await verify();
 		const txIds = block.txs.map(function (txid: string) {
 			//return hex.encode(hex.decode(tx.txid).reverse()) //hexReverse(tx.txid)
 			return hex.encode(hex.decode(txid).reverse()); //hexReverse(tx.txid)
@@ -252,7 +262,9 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 		//data = await payloadParseTransaction(tx.txid);
 		//deposit = data.opcode === '3C';
 
-		const mrT = generateMerkleRoot(txIds);
+		mrT = generateMerkleRoot(txIds);
+		mrT = hex.encode(hex.decode(mrT).reverse());
+
 		//if (hex.encode(hex.decode(mrT).reverse()) !== merkle_root) throw new Error('Merkle root error')
 		merkleTree = generateMerkleTree(txIds);
 		console.log('mr0: ' + block.merkle_root);
@@ -272,10 +284,10 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 </script>
 
 {#if inited}
-	<div class=" w-full">
+	<div class=" w-full my-5">
 		{#if error}<p class="text-danger">{error}</p>{/if}
 		<div class="pb-5">
-			<label for="transact-path">Merkle root (block.merkle_root === calcMerkleRoot(txs))</label>
+			<label for="transact-path">Merkle root</label>
 			<div
 				class={merkleRootCheck
 					? 'bg-success-500 text-white px-4 py-2 rounded border-success-500'
@@ -286,7 +298,7 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 		</div>
 
 		<div class="pb-5">
-			<label for="transact-path">Block hash = reverse(sha(sha(header)))</label>
+			<label for="transact-path">Block hash</label>
 			<div
 				class={blockHashCheck
 					? 'bg-success-500 text-white px-4 py-2 rounded border-success-500'

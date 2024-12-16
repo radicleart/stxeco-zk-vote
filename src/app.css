@@ -1,8 +1,8 @@
 @font-face {
 	font-family: 'Matter';
 	src:
-	local('Matter'),
-	url('/fonts/Matter-Regular.woff2') format('woff2');
+		local('Matter'),
+		url('/fonts/Matter-Regular.woff2') format('woff2');
 	font-weight: 400;
 	font-display: swap;
 }
@@ -10,13 +10,41 @@
 @font-face {
 	font-family: 'Matter Mono';
 	src:
-	local('Matter Mono'),
-	url('/fonts/MatterMono-Regular.woff2') format('woff2');
+		local('Matter Mono'),
+		url('/fonts/MatterMono-Regular.woff2') format('woff2');
 	font-weight: 400;
 	font-display: swap;
 }
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+	font-family: Arial, sans-serif;
+	line-height: 1.6;
+	margin: 0;
+	padding: 20px;
+	background-color: #f9f9f9;
+	color: #333;
+}
+h1,
+h2,
+h3 {
+	color: #0056b3;
+}
+a {
+	color: #007bff;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+.container {
+	max-width: 800px;
+	margin: auto;
+	background: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

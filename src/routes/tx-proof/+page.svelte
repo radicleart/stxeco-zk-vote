@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TransactionAnalysis from '$lib/components/merkle/TransactionAnalysis.svelte';
+	import TransactionAnalysis from '$lib/proofs/components/merkle/TransactionAnalysis.svelte';
 	import { sessionStore } from '$stores/stores';
 </script>
 
@@ -9,10 +9,7 @@
 			<div
 				class="flex flex-col w-full p-5 gap-10 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg"
 			>
-				<TransactionAnalysis
-					feature={'merkel-tree'}
-					txId={$sessionStore.testData?.bitcoinTxid || ''}
-				/>
+				<TransactionAnalysis />
 			</div>
 		</div>
 	</div>

@@ -4,7 +4,11 @@
 	import { ArrowRightAltOutline } from 'flowbite-svelte-icons';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { type VotingEventProposeProposal } from '@mijoco/stx_helpers/dist/index';
-	import { domain, structuredDataHash, structuredDataSignature } from '$lib/signatures-stacks';
+	import {
+		domain,
+		structuredDataHash,
+		structuredDataSignature
+	} from '$lib/chains/stacks/signatures-stacks';
 	import { sessionStore } from '$stores/stores';
 	import type { MessageInputs, SignatureData } from '$types/local_types';
 	import { sign } from '@noble/secp256k1';

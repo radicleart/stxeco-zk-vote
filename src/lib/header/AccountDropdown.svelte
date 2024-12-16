@@ -6,9 +6,9 @@
 	import StacksIcon from '$lib/assets/StacksIcon.svelte';
 	import LogoBitcoin from '$lib/assets/LogoBitcoin.svelte';
 	import LogoSbtc from '$lib/assets/LogoSBTC.svelte';
-	import CopyClipboard from '../common/CopyClipboard.svelte';
+	import CopyClipboard from '$lib/common/CopyClipboard.svelte';
 	import { logUserOut, makeFlash } from '@mijoco/stx_helpers/dist/index';
-	import { disconnectSolanaWallet } from '$lib/signatures-solana';
+	import { disconnectSolanaWallet } from '$lib/chains/solana/signatures-solana';
 
 	const dispatch = createEventDispatcher();
 

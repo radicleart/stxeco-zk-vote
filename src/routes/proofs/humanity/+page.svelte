@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Introduction from '$lib/proofs/components/Introduction.svelte';
 	import UserProofFlow from '$lib/proofs/components/proofs/voting/UserProofFlow.svelte';
 	import { sessionStore } from '$stores/stores';
 	import { ArrowLeftOutline, ArrowRightOutline } from 'flowbite-svelte-icons';

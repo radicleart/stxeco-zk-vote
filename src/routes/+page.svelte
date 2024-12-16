@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Introduction from '$lib/components/Introduction.svelte';
+	import Introduction from '$lib/proofs/components/Introduction.svelte';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
-		goto('/proofs/voting');
+		goto('/polymarket');
 	});
 </script>
 

@@ -4,10 +4,11 @@ import {
 	type ExchangeRate,
 	type SbtcUserSettingI
 } from '@mijoco/stx_helpers/dist/index';
-import { testProposals } from './devnet/proposals';
-import { isLoggedInSolana } from './signatures-solana';
+import { testProposals } from './chains/solana/devnet/proposals';
+import { isLoggedInSolana } from './chains/solana/signatures-solana';
 import type { SessionStore, SignatureData } from '$types/local_types';
 import { sessionStore } from '$stores/stores';
+import { isLoggedInSui } from './chains/sui/sui-connect';
 
 let ws: WebSocket;
 let status = 'Disconnected';
@@ -62,7 +63,7 @@ export async function getProposals() {
 }
 
 export function isWalletConnected() {
-	return isLoggedIn() || isLoggedInSolana();
+	return isLoggedIn() || isLoggedInSolana() || isLoggedInSui();
 }
 export function defaultSettings(): SbtcUserSettingI {
 	return {

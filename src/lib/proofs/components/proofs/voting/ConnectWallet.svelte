@@ -4,7 +4,11 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { appDetails } from '$lib/config';
 	import { logUserOut } from '@mijoco/stx_helpers/dist/account';
-	import { connectWallet, disconnectSolanaWallet, isLoggedInSolana } from '$lib/signatures-solana';
+	import {
+		connectWallet,
+		disconnectSolanaWallet,
+		isLoggedInSolana
+	} from '$lib/chains/solana/signatures-solana';
 	import { sessionStore } from '$stores/stores';
 	import bs58 from 'bs58';
 

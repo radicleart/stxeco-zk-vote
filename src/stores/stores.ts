@@ -19,4 +19,4 @@ export const sessionStore = persisted('sessionStore', {
 	testData: {
 		bitcoinTxid: ''
 	}
-} as SessionStore);
+} as unknown as SessionStore);

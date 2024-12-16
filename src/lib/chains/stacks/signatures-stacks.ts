@@ -2,7 +2,6 @@ import { sha256 } from '@noble/hashes/sha256';
 import { verifyMessageSignature } from '@stacks/encryption';
 import { hex } from '@scure/base';
 import {
-	bufferCV,
 	serializeCV,
 	stringAsciiCV,
 	tupleCV,
@@ -11,11 +10,10 @@ import {
 } from '@stacks/transactions';
 import * as P from 'micro-packed';
 import { getConfig } from '$stores/store_helpers';
-import { fmtMicroToStx } from './utils';
-import type { VotingEventProposeProposal, VotingEventVoteOnProposal } from '@mijoco/stx_helpers';
+import { fmtMicroToStx } from '$lib/utils';
 import { openStructuredDataSignatureRequestPopup } from '@stacks/connect';
 import { StacksMainnet } from '@stacks/network';
-import { appDetails } from './config';
+import { appDetails } from '$lib/config';
 import type { MessageInputs, SignatureData } from '$types/local_types';
 
 // type Message = {

@@ -52,7 +52,9 @@
 	"dependencies": {
 		"@mijoco/btc_helpers": "^0.0.9",
 		"@mijoco/stx_components": "^0.1.4",
-		"@mijoco/stx_helpers": "^0.5.1",
+		"@mijoco/stx_helpers": "^0.5.6",
+		"@mijoco/tx_anatomy": "^0.0.1",
+		"@mysten/sui": "^1.17.0",
 		"@noble/hashes": "^1.4.0",
 		"@noble/secp256k1": "^2.0.0",
 		"@popperjs/core": "^2.11.8",

@@ -1,56 +1,24 @@
 <script lang="ts">
 	import VerifyTransactions from './VerifyTransactions.svelte';
-	import DecodeSbtc from './DecodeSbtc.svelte';
-	import { sessionStore } from '$stores/stores';
+	import DecodeSbtc from './DecodeTransaction.svelte';
 	import { onMount } from 'svelte';
-	import Button from '../common/Button.svelte';
-	import {
-		fetchBitcoinTransaction,
-		fetchBlock,
-		fetchBlockTxIdList
-	} from '$lib/proofs/merkle_utils';
-	import AccountDropdown from '../header/AccountDropdown.svelte';
+	import Button from '$lib/common/Button.svelte';
+	import { sessionStore } from '$stores/stores';
+	import DecodeTransaction from './DecodeTransaction.svelte';
 
-	let blockHash: any;
-	let tx: any;
-	let block: any;
-	let txs: Array<string>;
-	export let txId: string; // = '01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3';
+	let txId: string;
 	let error: string | undefined;
 	let componentKey = 0;
-	let ready = false;
-	export let feature = 'sbtcDecode';
+	let readyGenerateProof = false;
+	let readyDecodeTx = false;
 
 	const clazzOn =
 		"bg-white relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-white before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]";
 	const clazzOff =
 		"         relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-white before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]";
 
-	const verify = async () => {
-		tx = await fetchBitcoinTransaction(txId);
-		sessionStore.update((conf) => {
-			conf.testData = {
-				bitcoinTxid: txId
-			};
-			return conf;
-		});
-		try {
-			blockHash = tx.status ? tx.status.block_hash : tx.blockhash;
-			if (blockHash) {
-				block = await fetchBlock(blockHash);
-				txs = await fetchBlockTxIdList(blockHash);
-				block.txs = txs;
-				ready = true;
-			}
-		} catch (err: any) {
-			ready = false;
-		}
-		componentKey++;
-	};
-
 	onMount(async () => {
-		if (!txId) return;
-		//verify();
+		txId = $sessionStore.testData?.bitcoinTxid || '';
 	});
 </script>
 
@@ -67,64 +35,39 @@
 		/>
 	</div>
 
-	<!-- <div class="flex gap-x-5 pb-5">
-		<div class="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
-			<input
-				class={feature === 'sbtcDecode' ? clazzOn : clazzOff}
-				type="radio"
-				name="sbtcDecode"
-				id="radioDefault02"
-				on:click={() => {
-					feature = 'sbtcDecode';
-					verify();
-				}}
-				bind:value={feature}
-				checked
-			/>
-			<label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer" for="radioDefault02">
-				sBTC decode
-			</label>
-		</div>
-		<div class="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
-			<input
-				class={feature === 'sbtcDecode' ? clazzOff : clazzOn}
-				type="radio"
-				name="merkleProof"
-				on:click={() => {
-					feature = 'merkleProof';
-					verify();
-				}}
-				bind:value={feature}
-				id="radioDefault01"
-			/>
-			<label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer" for="radioDefault01">
-				Merkle proofs
-			</label>
-		</div>
-	</div> -->
-
 	{#if txId}
-		<div class="pb-5">
+		<div class="flex gap-5">
 			<Button
 				darkScheme={false}
-				label={feature === 'sbtcDecode' ? 'Decode sBTC' : 'Generate Proof'}
+				label={'Generate Proof'}
 				target={''}
-				on:clicked={() => verify()}
+				on:clicked={() => {
+					readyDecodeTx = false;
+					readyGenerateProof = true;
+					componentKey++;
+				}}
+			/>
+			<Button
+				darkScheme={false}
+				label={'Decode tx'}
+				target={''}
+				on:clicked={() => {
+					readyDecodeTx = true;
+					readyGenerateProof = false;
+					componentKey++;
+				}}
 			/>
 		</div>
 	{/if}
 
-	{#if ready}
-		<div class="">
-			{#if tx}
-				{#if feature === 'sbtcDecode'}
-					<DecodeSbtc {tx} />
-				{:else if block}
-					{#key componentKey}
-						<VerifyTransactions {tx} {block} />
-					{/key}
-				{/if}
+	<div class="">
+		{#key componentKey}
+			{#if readyGenerateProof}
+				<VerifyTransactions {txId} />
 			{/if}
-		</div>
-	{/if}
+			{#if readyDecodeTx}
+				<DecodeTransaction {txId} />
+			{/if}
+		{/key}
+	</div>
 </div>
