@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Introduction from '$lib/polymarket/components/Introduction.svelte';
-	import { sessionStore } from '$stores/stores';
-	import { ArrowLeftOutline, ArrowRightOutline } from 'flowbite-svelte-icons';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {});
